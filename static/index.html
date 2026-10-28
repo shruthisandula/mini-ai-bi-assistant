@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise AI BI Assistant | Sales Intelligence Engine</title>
+    <meta name="description" content="AI-Powered Business Intelligence Assistant for natural language sales analytics with deterministic SQL execution and security guardrails.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="/static/css/styles.css?v=3">
+</head>
+<body>
+    <!-- Background vibrant ambient glow effects -->
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+    <div class="ambient-glow glow-3"></div>
+    <div class="ambient-glow glow-4"></div>
+
+    <div class="app-layout">
+        <!-- Top Navigation -->
+        <header class="top-nav">
+            <div class="brand">
+                <div class="brand-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                        <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <h1>AuraBI <span class="badge-tag">Sales AI</span></h1>
+                    <p class="brand-subtitle">Smart Natural Language Sales Analytics</p>
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <div class="status-indicator">
+                    <span class="status-dot"></span>
+                    <span class="status-text" id="engine-status">Engine Ready (Guardrails Active)</span>
+                </div>
+                <button class="btn btn-secondary" id="btn-schema" title="Inspect Database Schema">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                        <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                        <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                    </svg>
+                    <span>Schema</span>
+                </button>
+                <button class="btn btn-secondary" id="btn-reingest" title="Re-run ETL Pipeline and Cleaning">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 4 23 10 17 10"></polyline>
+                        <polyline points="1 20 1 14 7 14"></polyline>
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                    </svg>
+                    <span>ETL Audit</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Executive Colorful KPI Banner -->
+        <section class="kpi-banner" id="kpi-banner">
+            <div class="kpi-card kpi-emerald" id="kpi-total-revenue">
+                <div class="kpi-stripe"></div>
+                <div class="kpi-header">
+                    <span class="kpi-label">Total Net Revenue</span>
+                    <span class="kpi-icon-wrap rev-icon">₹</span>
+                </div>
+                <div class="kpi-value" id="kpi-val-revenue">₹1,445,200</div>
+                <div class="kpi-subtext">50 Completed Orders (1 Return Excluded)</div>
+            </div>
+
+            <div class="kpi-card kpi-amber" id="kpi-top-product">
+                <div class="kpi-stripe"></div>
+                <div class="kpi-header">
+                    <span class="kpi-label">Top Selling Product</span>
+                    <span class="kpi-icon-wrap prod-icon">🏆</span>
+                </div>
+                <div class="kpi-value" id="kpi-val-product">Monitor</div>
+                <div class="kpi-subtext" id="kpi-sub-product">₹473,000 Net Revenue (50 Units)</div>
+            </div>
+
+            <div class="kpi-card kpi-cyan" id="kpi-top-region">
+                <div class="kpi-stripe"></div>
+                <div class="kpi-header">
+                    <span class="kpi-label">Top Region</span>
+                    <span class="kpi-icon-wrap reg-icon">📍</span>
+                </div>
+                <div class="kpi-value" id="kpi-val-region">South</div>
+                <div class="kpi-subtext" id="kpi-sub-region">₹411,200 Revenue (28.5% Share)</div>
+            </div>
+
+            <div class="kpi-card kpi-purple" id="kpi-peak-month">
+                <div class="kpi-stripe"></div>
+                <div class="kpi-header">
+                    <span class="kpi-label">Peak Month</span>
+                    <span class="kpi-icon-wrap month-icon">📈</span>
+                </div>
+                <div class="kpi-value" id="kpi-val-month">May 2026</div>
+                <div class="kpi-subtext" id="kpi-sub-month">₹318,500 (+32.3% MoM)</div>
+            </div>
+        </section>
+
+        <!-- Main Query Section -->
+        <main class="main-content">
+            <!-- Search & Prompt Studio -->
+            <section class="prompt-studio">
+                <div class="query-box-wrapper">
+                    <div class="query-box-gradient-border"></div>
+                    <div class="query-box">
+                        <div class="query-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </div>
+                        <input 
+                            type="text" 
+                            id="query-input" 
+                            placeholder="Ask any business question (e.g., 'What is the total revenue?', 'Monthly trend', 'Top product')..."
+                            autocomplete="off"
+                        >
+                        <button class="btn btn-primary" id="btn-submit-query">
+                            <span class="btn-text">Analyze</span>
+                            <div class="spinner" id="query-spinner"></div>
+                            <svg class="btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Challenge Requirement Sample Query Pills -->
+                <div class="sample-pills-container">
+                    <span class="pills-title">Suggested Inquiries:</span>
+                    <div class="pills-track" id="pills-track">
+                        <button class="pill pill-emerald" data-query="What is the total revenue?">
+                            <span class="pill-badge">Q1</span> What is the total revenue?
+                        </button>
+                        <button class="pill pill-amber" data-query="Which product generated the highest revenue?">
+                            <span class="pill-badge">Q2</span> Top product by revenue?
+                        </button>
+                        <button class="pill pill-purple" data-query="What is the monthly revenue trend?">
+                            <span class="pill-badge">Q3</span> Monthly revenue trend?
+                        </button>
+                        <button class="pill pill-cyan" data-query="Which region generated the highest sales?">
+                            <span class="pill-badge">Q4</span> Highest sales region?
+                        </button>
+                        <button class="pill pill-rose" data-query="How did revenue change between January and February?">
+                            <span class="pill-badge">Q5</span> Revenue change: Jan vs Feb?
+                        </button>
+                        <button class="pill pill-indigo" data-query="What is the sales breakdown by product category?">
+                            Category Breakdown
+                        </button>
+                        <button class="pill pill-teal" data-query="Compare Online vs Retail sales channel performance">
+                            Online vs Retail
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results & Analytics Workspace -->
+            <section class="results-workspace" id="results-workspace" style="display: none;">
+                <!-- Intelligence Summary Card -->
+                <div class="card response-card">
+                    <div class="card-header">
+                        <div class="header-left">
+                            <div class="spark-badge">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+                                </svg>
+                                <span>AI Synthesized Intelligence</span>
+                            </div>
+                            <span class="exec-time" id="exec-time-badge">3.2 ms</span>
+                            <span class="guardrail-badge" id="guardrail-badge">🛡️ Read-Only Guardrail Passed</span>
+                        </div>
+                        <div class="header-right">
+                            <button class="btn btn-icon" id="btn-copy-answer" title="Copy Answer">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="answer-content" id="answer-content">
+                            <!-- Answer text inserted dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dynamic Visual Analytics (Chart) -->
+                <div class="card chart-card" id="chart-container-card">
+                    <div class="card-header">
+                        <div class="header-title">
+                            <h3>Visual Analytics</h3>
+                            <p class="subtitle" id="chart-subtitle">Deterministic visualization powered by Chart.js</p>
+                        </div>
+                        <div class="chart-controls">
+                            <div class="btn-group" id="chart-type-selector">
+                                <button class="btn-toggle active" data-chart-type="bar">Bar</button>
+                                <button class="btn-toggle" data-chart-type="line">Line</button>
+                                <button class="btn-toggle" data-chart-type="doughnut">Doughnut</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body chart-body">
+                        <div class="chart-wrapper">
+                            <canvas id="analyticsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Collapsible SQL Inspector -->
+                <div class="card sql-inspector-card">
+                    <div class="card-header clickable" id="toggle-sql-btn">
+                        <div class="header-left">
+                            <span class="code-icon">⚡</span>
+                            <h4>Deterministic SQL Query & Execution Plan</h4>
+                        </div>
+                        <div class="header-right">
+                            <span class="toggle-arrow" id="sql-arrow">▼</span>
+                        </div>
+                    </div>
+                    <div class="card-body" id="sql-body" style="display: none;">
+                        <div class="code-block-wrapper">
+                            <pre><code id="sql-code-display" class="language-sql">-- Query will appear here</code></pre>
+                            <button class="btn btn-sm btn-secondary copy-sql-btn" id="btn-copy-sql">Copy SQL</button>
+                        </div>
+                        <div class="query-meta-details" id="query-meta-details">
+                            <!-- Details injected dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabular Supporting Figures -->
+                <div class="card table-card">
+                    <div class="card-header">
+                        <div class="header-title">
+                            <h3>Supporting Figures & Records</h3>
+                            <p class="subtitle">Deterministic database query output rows</p>
+                        </div>
+                        <div class="header-right">
+                            <button class="btn btn-secondary btn-sm" id="btn-export-csv">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                                <span>Export CSV</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body table-responsive">
+                        <table class="data-table" id="data-table">
+                            <thead>
+                                <tr id="table-head-row">
+                                    <th>Field</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-body">
+                                <tr>
+                                    <td>No data loaded</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <div class="footer-content">
+                <p>Enterprise Sales Business Intelligence &bull; Natural Language Analytics</p>
+                <p class="tech-stack-tag">Interactive AI Assistant &bull; Deterministic SQL &bull; Visual Analytics</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modal for Schema Explorer -->
+    <div class="modal-overlay" id="schema-modal" style="display: none;">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>Database Schema & Data Dictionary</h3>
+                <button class="modal-close" id="btn-close-modal">&times;</button>
+            </div>
+            <div class="modal-body" id="schema-modal-body">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for ETL Audit Log -->
+    <div class="modal-overlay" id="etl-modal" style="display: none;">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>ETL Data Quality & Ingestion Audit</h3>
+                <button class="modal-close" id="btn-close-etl-modal">&times;</button>
+            </div>
+            <div class="modal-body" id="etl-modal-body">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js?v=3"></script>
+</body>
+</html>
